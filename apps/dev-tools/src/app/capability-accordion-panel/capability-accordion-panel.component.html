@@ -1,0 +1,19 @@
+<section class="description" *ngIf="provider.description">
+  {{provider.description}}
+</section>
+
+<section class="properties" *ngIf="provider.properties">
+  <h2>Properties</h2>
+  <sci-property [properties]="provider.properties"></sci-property>
+</section>
+
+<section class="used-by">
+  <h2>Used by following applications</h2>
+  <ul>
+    <li *ngFor="let consumer of consumers$ | async">
+      <a class="app-name" [routerLink]="['/app-list', {outlets: {details: ['app-detail', consumer.symbolicName]}}]" [class.self]="consumer.symbolicName === provider.metadata.appSymbolicName">
+        {{consumer.name}}
+      </a>
+    </li>
+  </ul>
+</section>

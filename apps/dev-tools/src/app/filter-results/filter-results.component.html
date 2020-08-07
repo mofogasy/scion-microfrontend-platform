@@ -1,0 +1,18 @@
+<section>
+  <output *ngIf="capabilityLookupResult$ | async as capabilities">
+    <sci-accordion *ngIf="capabilities.length else notFound">
+      <ng-container *ngFor="let capability of capabilities">
+        <ng-template sciAccordionItem [panel]="panel">
+          <app-provider-accordion-item [provider]="capability" [appSymbolicName]="capability.metadata.appSymbolicName"></app-provider-accordion-item>
+        </ng-template>
+
+        <ng-template #panel>
+          <app-provider-accordion-panel [provider]="capability"></app-provider-accordion-panel>
+        </ng-template>
+      </ng-container>
+    </sci-accordion>
+    <ng-template #notFound>
+      No capabilities found.
+    </ng-template>
+  </output>
+</section>

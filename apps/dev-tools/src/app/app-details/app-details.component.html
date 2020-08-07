@@ -1,0 +1,111 @@
+<section *ngIf="app$ | async as app">
+  <section>
+    <section class="properties">
+      <label class="app-name">Name:</label>
+      <span class="app-name">{{app.name}} ({{app.symbolicName}})</span>
+
+      <label class="app-url">URL:</label>
+      <a class="app-url" [href]="app.baseUrl" target="_blank">{{app.baseUrl}}</a>
+
+      <ng-container *ngIf="app.manifestUrl">
+        <label class="manifest-url">Manifest:</label>
+        <a class="manifest-url" [href]="app.manifestUrl" target="_blank">{{app.manifestUrl}}</a>
+      </ng-container>
+    </section>
+    <sci-tabbar>
+      <ng-template sciTab label="Capabilities">
+        <section class="providers" *ngIf="providers$ | async as capabilities">
+          <h2>Capabilities<span class="count-badge">{{capabilities.length}}</span></h2>
+          <sci-filter-field #capability_filter_field (filter)="onCapabilityFilter($event)"></sci-filter-field>
+          <sci-accordion (keydown)="capability_filter_field.onKeydown($event)">
+            <ng-container *ngFor="let provider of capabilities">
+              <ng-template sciAccordionItem [panel]="panel">
+                <app-provider-accordion-item [provider]="provider"></app-provider-accordion-item>
+              </ng-template>
+
+              <ng-template #panel>
+                <app-provider-accordion-panel [provider]="provider"></app-provider-accordion-panel>
+              </ng-template>
+            </ng-container>
+          </sci-accordion>
+        </section>
+      </ng-template>
+      <ng-template sciTab label="Intentions">
+        <section class="intentions" *ngIf="intentions$ | async as intents">
+          <h2>Intents<span class="count-badge">{{intents.length}}</span></h2>
+          <sci-filter-field #intent_filter_field (filter)="onIntentFilter($event)"></sci-filter-field>
+          <sci-accordion (keydown)="intent_filter_field.onKeydown($event)">
+            <ng-container *ngFor="let intent of intents">
+              <ng-template sciAccordionItem [panel]="panel">
+                <app-intent-accordion-item [intent]="intent"></app-intent-accordion-item>
+              </ng-template>
+
+              <ng-template #panel>
+                <app-intent-accordion-panel [intent]="intent"></app-intent-accordion-panel>
+              </ng-template>
+            </ng-container>
+          </sci-accordion>
+        </section>
+      </ng-template>
+      <ng-template sciTab label="Dependencies">
+        <section class="dependencies">
+          <div class="requires">
+            <span>Requires</span>
+            <sci-list>
+              <ng-template *ngFor="let app of requiresApplications$ | async; trackBy: trackByFn" sciListItem [key]="app.symbolicName">
+                <a class="app-name" [routerLink]="['../', app.symbolicName]">{{app.name}}</a>
+              </ng-template>
+            </sci-list>
+          </div>
+          <div class="required-by">
+            <span>Required by</span>
+            <sci-list>
+              <ng-template *ngFor="let app of requiredByApplications$ | async; trackBy: trackByFn" sciListItem [key]="app.symbolicName">
+                <a class="app-name" [routerLink]="['../', app.symbolicName]">{{app.name}}</a>
+              </ng-template>
+            </sci-list>
+          </div>
+        </section>
+      </ng-template>
+      <ng-template sciTab label="Platform Flags">
+        <section class="platform-flags">
+          <div>
+            <h3>Scope Check</h3>
+            <span *ngIf="app.scopeCheckDisabled; else scopeCheckEnabled" title="Scope check is disabled for this application. This application can use private capabilities of other applications.">
+              DISABLED
+            </span>
+            <ng-template #scopeCheckEnabled>
+              <span title="Scope check is enabled for this application. This application can only use public capabilities of other applications.">
+                ENABLED
+              </span>
+            </ng-template>
+          </div>
+
+          <div>
+            <h3>Intention Register API</h3>
+            <span *ngIf="app.intentionRegisterApiDisabled; else intentionRegisterApiEnabled" title="Intention register API is disabled for this application. This application has to declare intentions in its manifest.">
+              DISABLED
+            </span>
+            <ng-template #intentionRegisterApiEnabled>
+              <span title="Intention register API is enabled for this application. This application can register intentions dynamically.">
+                ENABLED
+              </span>
+            </ng-template>
+          </div>
+
+          <div>
+            <h3>Intention Check</h3>
+            <span *ngIf="app.intentionCheckDisabled; else intentionCheckEnabled" title="Intention check is disabled for this application. This application can issue intents for which it has not declared any intention.">
+              DISABLED
+            </span>
+            <ng-template #intentionCheckEnabled>
+              <span title="Intention check is enabled for this application. This application can only issue intents for which it has declared an intention in its manifest.">
+                ENABLED
+              </span>
+            </ng-template>
+          </div>
+        </section>
+      </ng-template>
+    </sci-tabbar>
+  </section>
+</section>

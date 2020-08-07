@@ -1,0 +1,105 @@
+@use 'sci-toolkit-styles' as sci-toolkit-styles;
+$menu-bar-size: 32px;
+
+:host {
+  display: flex;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  > menu {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    background-color: var(--sci-color-P100);
+
+    &.left {
+      flex-direction: column;
+    }
+
+    > li {
+      list-style-type: none;
+      overflow: hidden;
+      border: 1px solid var(--sci-color-P200);
+      border-radius: 4px;
+      margin: 3px;
+      width: 26px;
+      height: 26px;
+
+      > a {
+        color: black;
+      }
+
+      &:hover {
+        background-color: var(--sci-color-P500);
+      }
+    }
+  }
+
+  > sci-viewport {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    router-outlet {
+      position: absolute; // take router outlet out of the document flow
+    }
+
+    sci-sashbox {
+      --sci-sashbox-gap: 0;
+
+      div {
+        display: flex;
+        flex-direction: column;
+
+        header {
+          position: relative;
+          background-color: var(--sci-color-P100);
+          padding: .5em;
+          font-size: 1em;
+          font-weight: bold;
+
+          > span {
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            padding: .5em;
+
+            &.hide-primary {
+              position: absolute;
+              right: 0;
+              top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.top {
+    flex-direction: column;
+
+    > sci-menu-bar {
+      height: $menu-bar-size;
+    }
+
+    > sci-viewport {
+      top: $menu-bar-size;
+      left: 0;
+    }
+  }
+
+  &.left {
+
+    > sci-menu-bar {
+      width: $menu-bar-size;
+    }
+
+    > sci-viewport {
+      top: 0;
+      left: $menu-bar-size;
+    }
+  }
+}

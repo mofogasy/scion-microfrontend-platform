@@ -1,0 +1,22 @@
+{
+  "name": "Devtools",
+  "baseUrl": "#",
+  "capabilities": [
+    {
+      "type": "devtools",
+      "qualifier": {
+        "command": "*"
+      },
+      "private": false
+    }
+  ],
+  "intentions": [
+    {
+      "type": "country",
+      "qualifier": {
+        "name": "*",
+        "abbreviation": "*"
+      }
+    }
+  ]
+}

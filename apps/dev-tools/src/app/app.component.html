@@ -1,0 +1,31 @@
+<menu [class.left]="isMenuBarLeft" role="toolbar">
+  <li>
+    <a [routerLink]="['app-list']" title="List"><i class="material-icons list">list</i></a>
+  </li>
+  <li>
+    <a [routerLink]="['find-capabilities', {outlets: {details: ['filter-results']}}]" title="Filter"><i class="material-icons search">search</i></a>
+  </li>
+</menu>
+<sci-viewport sciDimension (sciDimensionChange)="onDimensionChange($event)">
+  <sci-sashbox>
+    <ng-template sciSash *ngIf="showPrimary && showSash" size="1">
+      <div>
+        <header>
+          {{primaryTitle}}
+          <span class="hide-primary" *ngIf="showPrimary && showDetails" (click)="onHidePrimaryClicked()"><<</span>
+        </header>
+        <router-outlet (activate)="onActivatePrimary($event)"></router-outlet>
+      </div>
+    </ng-template>
+
+    <ng-template sciSash *ngIf="showDetails && showSash" size="2">
+      <div>
+        <header>
+          <span *ngIf="!showPrimary && showDetails" (click)="onShowPrimaryClicked()">>></span>
+          {{detailsTitle}}
+        </header>
+        <router-outlet name="details" (activate)="onActivateDetails($event)"></router-outlet>
+      </div>
+    </ng-template>
+  </sci-sashbox>
+</sci-viewport>
